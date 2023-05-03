@@ -1,0 +1,5 @@
+-- This SQL script creates an index idx_name_first_score on the table names and
+-- the first letter of name and the score
+-- Only the first letter of name AND score are indexed.
+
+CREATE INDEX idx_name_first_score on names(name(1), score);
