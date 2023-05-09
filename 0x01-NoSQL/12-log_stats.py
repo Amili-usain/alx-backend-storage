@@ -15,10 +15,10 @@ from pymongo import MongoClient
 if __name__ == "__main__":
     # connect to the MongoDB server
     client = MongoClient('mongodb://127.0.0.1:27017')
-    
+
     # select the `nginx` collection in the `logs` database
     collection = client.logs.nginx
-    
+
     # get number of documents in collection
     docs_num = collection.count_documents({})
     get_num = collection.count_documents({'method': 'GET'})
@@ -26,9 +26,9 @@ if __name__ == "__main__":
     put_num = collection.count_documents({'method': 'PUT'})
     patch_num = collection.count_documents({'method': 'PATCH'})
     delete_num = collection.count_documents({'method': 'DELETE'})
-	get_status = collection.count_documents({'method': 'GET',
+    get_status = collection.count_documents({'method': 'GET',
                                              'path': '/status'})
-    
+
     # print the stats
     print(f"{docs_num} logs")
     print("Methods:")
