@@ -9,32 +9,26 @@ The script prints the following stats about the nginx logs:
 - Number of logs with method=GET and path=/status
 """
 
-
 from pymongo import MongoClient
 
+
 if __name__ == "__main__":
-    # connect to the MongoDB server
-    client = MongoClient('mongodb://127.0.0.1:27017')
-
-    # select the `nginx` collection in the `logs` database
-    collection = client.logs.nginx
-
+    client = MongoClient()
+    nginx_logs = client.logs.nginx
     # get number of documents in collection
-    docs_num = collection.count_documents({})
-    get_num = collection.count_documents({'method': 'GET'})
-    post_num = collection.count_documents({'method': 'POST'})
-    put_num = collection.count_documents({'method': 'PUT'})
-    patch_num = collection.count_documents({'method': 'PATCH'})
-    delete_num = collection.count_documents({'method': 'DELETE'})
-    get_status = collection.count_documents({'method': 'GET',
+    docs_num = nginx_logs.count_documents({})
+    get_num = nginx_logs.count_documents({'method': 'GET'})
+    post_num = nginx_logs.count_documents({'method': 'POST'})
+    put_num = nginx_logs.count_documents({'method': 'PUT'})
+    patch_num = nginx_logs.count_documents({'method': 'PATCH'})
+    delete_num = nginx_logs.count_documents({'method': 'DELETE'})
+    get_status = nginx_logs.count_documents({'method': 'GET',
                                              'path': '/status'})
-
-    # print the stats
-    print(f"{docs_num} logs")
+    print("{} logs".format(docs_num))
     print("Methods:")
-    print(f"\tmethod GET: {get_num}")
-    print(f"\tmethod POST: {post_num}")
-    print(f"\tmethod PUT: {put_num}")
-    print(f"\tmethod PATCH: {patch_num}")
-    print(f"\tmethod DELETE: {delete_num}")
-    print(f"{get_status} status checks for method GET and path /status")
+    print("\tmethod GET: {}".format(get_num))
+    print("\tmethod POST: {}".format(post_num))
+    print("\tmethod PUT: {}".format(put_num))
+    print("\tmethod PATCH: {}".format(patch_num))
+    print("\tmethod DELETE: {}".format(delete_num))
+    print("{} status check".format(get_status))
