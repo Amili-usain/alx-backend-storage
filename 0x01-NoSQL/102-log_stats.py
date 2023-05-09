@@ -25,20 +25,29 @@ if __name__ == "__main__":
     delete_num = collections.count_documents({'method': 'DELETE'})
     get_status = collections.count_documents({'method': 'GET',
                                              'path': '/status'})
-    ips_pipeline = [
-        {"$group": {"_id": "$ip", "count": {"$sum": 1}}},
-        {"$sort": {"count": -1}},
-        {"$limit": 10}
-    ]
-    ips = list(collections.aggregate(ips_pipeline))
-    ips_str = '\n'.join(f"\t{_id}: {count}" for _id, count in ips)
-    print(f"{docs_num} logs")
+    IPs_count = collections.aggregate([
+        {
+            '$group': {
+                '_id': "$ip",
+                'count': {'$sum': 1}
+            }
+        },
+        {
+            "$sort": {"count": -1}
+        }
+    ])
+    print("{} logs".format(docs_num))
     print("Methods:")
-    print(f"\tmethod GET: {get_num}")
-    print(f"\tmethod POST: {post_num}")
-    print(f"\tmethod PUT: {put_num}")
-    print(f"\tmethod PATCH: {patch_num}")
-    print(f"\tmethod DELETE: {delete_num}")
-    print(f"{get_status} status check")
+    print("\tmethod GET: {}".format(get_num))
+    print("\tmethod POST: {}".format(post_num))
+    print("\tmethod PUT: {}".format(put_num))
+    print("\tmethod PATCH: {}".format(patch_num))
+    print("\tmethod DELETE: {}".format(delete_num))
+    print("{} status check".format(get_status))
     print("IPs:")
-    print(ips_str)
+    x = 0
+    for i in IPs_count:
+        print("\t{}: {}".format(i.get('_id'), i.get('count')))
+        x += 1
+        if x > 9:
+            break
